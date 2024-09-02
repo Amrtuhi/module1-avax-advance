@@ -1,20 +1,18 @@
-// GameToken.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-contract GameToken {
+contract ERC20 {
     uint public totalSupply;
     mapping(address => uint) public balanceOf;
     mapping(address => mapping(address => uint)) public allowance;
-    string public name = "RaoSaab";
-    string public symbol = "RS";
+    string public name = "Amrita";
+    string public symbol = "Tuhi";
     uint8 public decimals = 18;
 
-    event Transfer(address indexed from, address indexed to, uint value);
+		event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
 
     function transfer(address recipient, uint amount) external returns (bool) {
-        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
         balanceOf[msg.sender] -= amount;
         balanceOf[recipient] += amount;
         emit Transfer(msg.sender, recipient, amount);
@@ -27,9 +25,11 @@ contract GameToken {
         return true;
     }
 
-    function transferFrom(address sender, address recipient, uint amount) external returns (bool) {
-        require(balanceOf[sender] >= amount, "Insufficient balance");
-        require(allowance[sender][msg.sender] >= amount, "Allowance exceeded");
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint amount
+    ) external returns (bool) {
         allowance[sender][msg.sender] -= amount;
         balanceOf[sender] -= amount;
         balanceOf[recipient] += amount;
@@ -44,7 +44,6 @@ contract GameToken {
     }
 
     function burn(uint amount) external {
-        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
         balanceOf[msg.sender] -= amount;
         totalSupply -= amount;
         emit Transfer(msg.sender, address(0), amount);
